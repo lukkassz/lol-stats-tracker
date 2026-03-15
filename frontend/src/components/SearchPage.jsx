@@ -19,7 +19,7 @@ export default function SearchPage({ onSearch }) {
         e.preventDefault()
         const parts = input.trim().split("#")
         if (parts.length !== 2) {
-            setError("Wpisz w formacie Nick#TAG  (np. Faker#KR1)")
+            setError("Enter in format Name#TAG (e.g. Faker#KR1)")
             return
         }
         const [name, tag] = parts
@@ -29,11 +29,11 @@ export default function SearchPage({ onSearch }) {
             const res = await axios.get(`${API}/player/${encodeURIComponent(name)}/${encodeURIComponent(tag)}`)
             onSearch(res.data)
         } catch (err) {
-            const msg = err?.response?.data?.detail
+            const detail = err?.response?.data?.detail
             if (err?.response?.status === 403) {
-                setError(msg || "Klucz API wygasł – skontaktuj się z administratorem.")
+                setError(detail || "API key expired. Please contact administrator.")
             } else {
-                setError(msg || "Nie znaleziono gracza. Sprawdź nick i tag.")
+                setError(detail || "Player not found. Check name and tag.")
             }
         } finally {
             setLoading(false)
@@ -44,23 +44,23 @@ export default function SearchPage({ onSearch }) {
         <div className="search-page">
             <div className="search-hero">
                 <div className="search-logo">
-                    <span className="logo-icon">⚔</span>
+                    <span className="logo-icon">&#x2694;</span>
                     <h1>LoL Stats Tracker</h1>
-                    <p>Sprawdź statystyki dowolnego gracza na EUW</p>
+                    <p>Look up any player's stats on EUW</p>
                 </div>
 
                 <form className="search-form" onSubmit={handleSearch}>
                     <div className="search-input-wrap">
                         <input
                             type="text"
-                            placeholder="Nick#TAG  (np. Faker#KR1)"
+                            placeholder="Name#TAG (e.g. Faker#KR1)"
                             value={input}
                             onChange={e => setInput(e.target.value)}
                             className="search-input"
                             autoFocus
                         />
                         <button type="submit" className="search-btn" disabled={loading}>
-                            {loading ? <span className="spinner" /> : "Szukaj"}
+                            {loading ? <span className="spinner" /> : "Search"}
                         </button>
                     </div>
                     {error && <p className="search-error">{error}</p>}

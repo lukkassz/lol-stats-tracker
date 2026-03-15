@@ -10,3 +10,4 @@ frontend/dist/
 # IDE
 .vscode/
 .idea/
+.claude/
